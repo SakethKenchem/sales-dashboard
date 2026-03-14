@@ -59,7 +59,7 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 
 
-Changelog (2026-03-14):
+## Changelog (2026-03-14):
 feat: Add vendor viewing functionality and enhance sales data management
 
 - Implemented a new view page for vendors, allowing users to view vendor details.
