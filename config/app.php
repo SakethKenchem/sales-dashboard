@@ -54,6 +54,8 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
+    'sales_data_admin_emails' => env('SALES_DATA_ADMIN_EMAILS', ''),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone

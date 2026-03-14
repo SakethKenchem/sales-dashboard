@@ -2,8 +2,10 @@
 
 namespace App\Filament\Actions;
 
+use App\Support\SalesDataActionAuthorization;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
@@ -15,10 +17,21 @@ class DeduplicateSalesDataAction
             ->label('Deduplicate Data')
             ->icon('heroicon-o-sparkles')
             ->color('warning')
+            ->visible(fn(): bool => SalesDataActionAuthorization::canManageData(Auth::user()))
             ->requiresConfirmation()
             ->modalHeading('Remove duplicate sales rows?')
             ->modalDescription('This keeps the newest row and removes exact duplicate rows from sales_records.')
             ->action(function (): void {
+                if (! SalesDataActionAuthorization::canManageData(Auth::user())) {
+                    Notification::make()
+                        ->title('Unauthorized action')
+                        ->body('You are not allowed to deduplicate sales data.')
+                        ->danger()
+                        ->send();
+
+                    return;
+                }
+
                 $availableColumns = Schema::getColumnListing('sales_records');
 
                 $candidateColumns = [

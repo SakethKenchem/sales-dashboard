@@ -70,3 +70,5 @@ feat: Add vendor viewing functionality and enhance sales data management
 - Added integrity columns to the sales_records table to track source files and row hashes for better data validation.
 - Updated import functionality to support new integrity checks and improved data handling.
 - Introduced a TopRegionsTable widget to display performance metrics for regions.
+
+- Add authorization checks for sales data actions and introduce admin email configuration
