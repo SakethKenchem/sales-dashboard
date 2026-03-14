@@ -23,7 +23,7 @@ class ImportSalesExcelAction
             ->label('Import Excel')
             ->icon('heroicon-o-arrow-up-tray')
             ->color('success')
-            ->visible(fn(): bool => SalesDataActionAuthorization::canManageData(Auth::user()))
+            ->visible(fn(): bool => Auth::check())
             ->form([
                 FileUpload::make('workbook')
                     ->label('Sales workbook (.xlsx / .xls / .csv)')

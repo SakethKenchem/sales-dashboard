@@ -65,6 +65,6 @@ class SalesMetricsQuery
 
         // Prefer values imported from the Master sheet when available,
         // and fall back to the best available value from other sheets.
-        return "COALESCE(MAX(CASE WHEN LOWER(COALESCE(source_sheet, '')) = 'master' THEN COALESCE({$column}, 0) END), MAX(COALESCE({$column}, 0)))";
+        return "COALESCE(MAX(CASE WHEN LOWER(COALESCE(source_sheet, '')) = 'master' AND {$column} IS NOT NULL THEN {$column} END), MAX(COALESCE({$column}, 0)))";
     }
 }

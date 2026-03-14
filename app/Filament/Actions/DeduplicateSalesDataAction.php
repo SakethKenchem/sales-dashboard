@@ -17,7 +17,7 @@ class DeduplicateSalesDataAction
             ->label('Deduplicate Data')
             ->icon('heroicon-o-sparkles')
             ->color('warning')
-            ->visible(fn(): bool => SalesDataActionAuthorization::canManageData(Auth::user()))
+            ->visible(fn(): bool => Auth::check())
             ->requiresConfirmation()
             ->modalHeading('Remove duplicate sales rows?')
             ->modalDescription('This keeps the newest row and removes exact duplicate rows from sales_records.')

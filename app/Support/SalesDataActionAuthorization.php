@@ -22,7 +22,7 @@ class SalesDataActionAuthorization
             return in_array($email, $allowedEmails, true);
         }
 
-        // Safe default for fresh installs without explicit allowlist configuration.
-        return (int) $user->getAuthIdentifier() === 1;
+        // If no explicit allowlist is configured, allow authenticated panel users.
+        return true;
     }
 }

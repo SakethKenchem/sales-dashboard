@@ -402,10 +402,21 @@ class SalesDataImport
 
         $map = [];
         $offset = 1;
+        $highestExplicitMonth = $this->highestExplicitMonthInHeader($headerMap);
 
         foreach ($keysInOrder as $key) {
             if (isset($headerMap[$key])) {
                 continue;
+            }
+
+            if (str_starts_with($key, 'month_')) {
+                $monthNumber = (int) str_replace('month_', '', $key);
+
+                // Avoid shifting totals/other fields into future month columns
+                // when the worksheet only provides a partial month range.
+                if ($highestExplicitMonth > 0 && $monthNumber > $highestExplicitMonth) {
+                    continue;
+                }
             }
 
             $map[$key] = $vendorIndex + $offset;
@@ -413,6 +424,19 @@ class SalesDataImport
         }
 
         return $map;
+    }
+
+    private function highestExplicitMonthInHeader(array $headerMap): int
+    {
+        $highest = 0;
+
+        for ($month = 1; $month <= 12; $month++) {
+            if (isset($headerMap['month_' . $month])) {
+                $highest = $month;
+            }
+        }
+
+        return $highest;
     }
 
     private function aliases(): array

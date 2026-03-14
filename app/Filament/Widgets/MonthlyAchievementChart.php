@@ -29,6 +29,7 @@ class MonthlyAchievementChart extends ChartWidget
             'month_12' => 'Dec',
         ];
 
+        $highestMonthWithData = $this->highestMonthWithData();
         $visibleMonths = [];
 
         foreach ($monthMap as $column => $label) {
@@ -36,9 +37,13 @@ class MonthlyAchievementChart extends ChartWidget
                 continue;
             }
 
-            if (in_array($column, ['month_1', 'month_2', 'month_3'], true) || SalesMetricsQuery::hasAnyData($column)) {
-                $visibleMonths[$column] = $label;
+            $monthNumber = (int) str_replace('month_', '', $column);
+
+            if ($highestMonthWithData > 0 && $monthNumber > $highestMonthWithData) {
+                continue;
             }
+
+            $visibleMonths[$column] = $label;
         }
 
         if ($visibleMonths === []) {
@@ -77,5 +82,18 @@ class MonthlyAchievementChart extends ChartWidget
     protected function getType(): string
     {
         return 'line';
+    }
+
+    private function highestMonthWithData(): int
+    {
+        $highest = 0;
+
+        for ($month = 1; $month <= 12; $month++) {
+            if (SalesMetricsQuery::hasAnyData('month_' . $month)) {
+                $highest = $month;
+            }
+        }
+
+        return $highest;
     }
 }

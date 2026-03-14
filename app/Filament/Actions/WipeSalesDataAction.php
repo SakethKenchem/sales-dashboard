@@ -17,7 +17,7 @@ class WipeSalesDataAction
             ->label('Wipe Data')
             ->icon('heroicon-o-trash')
             ->color('danger')
-            ->visible(fn(): bool => SalesDataActionAuthorization::canManageData(Auth::user()))
+            ->visible(fn(): bool => Auth::check())
             ->requiresConfirmation()
             ->modalHeading('Wipe imported sales data?')
             ->modalDescription('This removes sales records, regions, vendors, sales managers, and uploaded import files.')
