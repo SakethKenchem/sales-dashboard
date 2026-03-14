@@ -2,8 +2,9 @@
 
 namespace App\Filament\Widgets;
 
-use App\Models\SalesRecord;
+use App\Support\SalesMetricsQuery;
 use Filament\Widgets\ChartWidget;
+use Illuminate\Support\Facades\DB;
 
 class MonthlyAchievementChart extends ChartWidget
 {
@@ -13,42 +14,63 @@ class MonthlyAchievementChart extends ChartWidget
 
     protected function getData(): array
     {
-        $totals = SalesRecord::query()
-            ->selectRaw('COALESCE(SUM(month_1), 0) AS jan')
-            ->selectRaw('COALESCE(SUM(month_2), 0) AS feb')
-            ->selectRaw('COALESCE(SUM(month_3), 0) AS mar')
-            ->selectRaw('COALESCE(SUM(month_4), 0) AS apr')
-            ->selectRaw('COALESCE(SUM(month_5), 0) AS may')
-            ->selectRaw('COALESCE(SUM(month_6), 0) AS jun')
-            ->selectRaw('COALESCE(SUM(month_7), 0) AS jul')
-            ->selectRaw('COALESCE(SUM(month_8), 0) AS aug')
-            ->selectRaw('COALESCE(SUM(month_9), 0) AS sep')
-            ->selectRaw('COALESCE(SUM(month_10), 0) AS oct')
-            ->selectRaw('COALESCE(SUM(month_11), 0) AS nov')
-            ->selectRaw('COALESCE(SUM(month_12), 0) AS dec')
-            ->first();
+        $monthMap = [
+            'month_1' => 'Jan',
+            'month_2' => 'Feb',
+            'month_3' => 'Mar',
+            'month_4' => 'Apr',
+            'month_5' => 'May',
+            'month_6' => 'Jun',
+            'month_7' => 'Jul',
+            'month_8' => 'Aug',
+            'month_9' => 'Sep',
+            'month_10' => 'Oct',
+            'month_11' => 'Nov',
+            'month_12' => 'Dec',
+        ];
+
+        $visibleMonths = [];
+
+        foreach ($monthMap as $column => $label) {
+            if (! SalesMetricsQuery::columnExists($column)) {
+                continue;
+            }
+
+            if (in_array($column, ['month_1', 'month_2', 'month_3'], true) || SalesMetricsQuery::hasAnyData($column)) {
+                $visibleMonths[$column] = $label;
+            }
+        }
+
+        if ($visibleMonths === []) {
+            return [
+                'datasets' => [['label' => 'Achieved', 'data' => [0]]],
+                'labels' => ['No month data'],
+            ];
+        }
+
+        $query = DB::query()->fromSub(SalesMetricsQuery::deduplicatedRows(), 'r');
+
+        foreach (array_keys($visibleMonths) as $column) {
+            $query->selectRaw("COALESCE(SUM({$column}), 0) AS {$column}");
+        }
+
+        $totals = $query->first();
+
+        $labels = array_values($visibleMonths);
+        $data = [];
+
+        foreach (array_keys($visibleMonths) as $column) {
+            $data[] = (float) ($totals?->{$column} ?? 0);
+        }
 
         return [
             'datasets' => [
                 [
                     'label' => 'Achieved',
-                    'data' => [
-                        (float) ($totals?->jan ?? 0),
-                        (float) ($totals?->feb ?? 0),
-                        (float) ($totals?->mar ?? 0),
-                        (float) ($totals?->apr ?? 0),
-                        (float) ($totals?->may ?? 0),
-                        (float) ($totals?->jun ?? 0),
-                        (float) ($totals?->jul ?? 0),
-                        (float) ($totals?->aug ?? 0),
-                        (float) ($totals?->sep ?? 0),
-                        (float) ($totals?->oct ?? 0),
-                        (float) ($totals?->nov ?? 0),
-                        (float) ($totals?->dec ?? 0),
-                    ],
+                    'data' => $data,
                 ],
             ],
-            'labels' => ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            'labels' => $labels,
         ];
     }
 

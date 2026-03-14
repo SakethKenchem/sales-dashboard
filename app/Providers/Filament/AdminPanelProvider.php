@@ -5,6 +5,7 @@ namespace App\Providers\Filament;
 use App\Filament\Widgets\MonthlyAchievementChart;
 use App\Filament\Widgets\RegionAchievementChart;
 use App\Filament\Widgets\SalesKpiOverview;
+use App\Filament\Widgets\TopRegionsTable;
 use App\Filament\Widgets\TopSalesManagersTable;
 use App\Filament\Widgets\TopVendorsTable;
 use Filament\Http\Middleware\Authenticate;
@@ -46,6 +47,7 @@ class AdminPanelProvider extends PanelProvider
                 SalesKpiOverview::class,
                 MonthlyAchievementChart::class,
                 RegionAchievementChart::class,
+                TopRegionsTable::class,
                 TopSalesManagersTable::class,
                 TopVendorsTable::class,
             ])

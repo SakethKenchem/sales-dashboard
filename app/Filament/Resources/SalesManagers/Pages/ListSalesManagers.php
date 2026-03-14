@@ -2,7 +2,9 @@
 
 namespace App\Filament\Resources\SalesManagers\Pages;
 
+use App\Filament\Actions\DeduplicateSalesDataAction;
 use App\Filament\Actions\ImportSalesExcelAction;
+use App\Filament\Actions\WipeSalesDataAction;
 use App\Filament\Resources\SalesManagers\SalesManagerResource;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
@@ -15,6 +17,8 @@ class ListSalesManagers extends ListRecords
     {
         return [
             ImportSalesExcelAction::make(),
+            DeduplicateSalesDataAction::make(),
+            WipeSalesDataAction::make(),
             CreateAction::make(),
         ];
     }

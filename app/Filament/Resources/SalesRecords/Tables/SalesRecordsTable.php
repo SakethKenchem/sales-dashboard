@@ -55,7 +55,7 @@ class SalesRecordsTable
                 TextColumn::make('month_11')->label('NOV')->numeric(decimalPlaces: 2)->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('month_12')->label('DEC')->numeric(decimalPlaces: 2)->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('total_achieved')->label('Total Achieved')->numeric(decimalPlaces: 2),
-                TextColumn::make('commit_month')->label('Commit - MAR')->numeric(decimalPlaces: 2),
+                TextColumn::make('commit_month')->label('Commit (Import Month)')->numeric(decimalPlaces: 2),
                 TextColumn::make('percent_achvd_q1')->label('%Achvd Q1')->numeric(decimalPlaces: 2),
                 TextColumn::make('bal_to_achv')->label('Bal to Achv Q1')->numeric(decimalPlaces: 2),
                 TextColumn::make('qtr_tgt')->label('QTR Target')->numeric(decimalPlaces: 2),

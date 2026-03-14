@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\SalesManagers\Tables;
 
+use App\Filament\Resources\SalesManagers\SalesManagerResource;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -82,7 +83,8 @@ class SalesManagersTable
             ])
             ->recordActions([
                 EditAction::make(),
-                ViewAction::make(),
+                ViewAction::make()
+                    ->url(fn($record): string => SalesManagerResource::getUrl('view', ['record' => $record])),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

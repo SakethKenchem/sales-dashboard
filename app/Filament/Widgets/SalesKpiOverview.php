@@ -4,16 +4,18 @@ namespace App\Filament\Widgets;
 
 use App\Models\Region;
 use App\Models\SalesManager;
-use App\Models\SalesRecord;
+use App\Support\SalesMetricsQuery;
 use App\Models\Vendor;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
+use Illuminate\Support\Facades\DB;
 
 class SalesKpiOverview extends BaseWidget
 {
     protected function getStats(): array
     {
-        $totals = SalesRecord::query()
+        $totals = DB::query()
+            ->fromSub(SalesMetricsQuery::deduplicatedRows(), 'r')
             ->selectRaw('COALESCE(SUM(qtr_tgt), 0) AS qtr_tgt_sum')
             ->selectRaw('COALESCE(SUM(total_achieved), 0) AS achieved_sum')
             ->selectRaw('COALESCE(SUM(yr_tgt), 0) AS yr_tgt_sum')

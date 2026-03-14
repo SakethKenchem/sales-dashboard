@@ -2,8 +2,9 @@
 
 namespace App\Filament\Widgets;
 
-use App\Models\Region;
+use App\Support\SalesMetricsQuery;
 use Filament\Widgets\ChartWidget;
+use Illuminate\Support\Facades\DB;
 
 class RegionAchievementChart extends ChartWidget
 {
@@ -11,10 +12,14 @@ class RegionAchievementChart extends ChartWidget
 
     protected function getData(): array
     {
-        $regions = Region::query()
-            ->withSum('salesRecords as achieved_sum', 'total_achieved')
-            ->withSum('salesRecords as target_sum', 'qtr_tgt')
-            ->orderBy('name')
+        $regions = DB::query()
+            ->fromSub(SalesMetricsQuery::deduplicatedRows(), 'r')
+            ->join('regions', 'regions.id', '=', 'r.region_id')
+            ->selectRaw('regions.name as name')
+            ->selectRaw('COALESCE(SUM(r.total_achieved), 0) as achieved_sum')
+            ->selectRaw('COALESCE(SUM(r.qtr_tgt), 0) as target_sum')
+            ->groupBy('regions.name')
+            ->orderBy('regions.name')
             ->get();
 
         return [

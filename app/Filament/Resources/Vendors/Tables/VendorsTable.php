@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Vendors\Tables;
 
+use App\Filament\Resources\Vendors\VendorResource;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -44,7 +45,8 @@ class VendorsTable
             ])
             ->recordActions([
                 EditAction::make(),
-                ViewAction::make(),
+                ViewAction::make()
+                    ->url(fn($record): string => VendorResource::getUrl('view', ['record' => $record])),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

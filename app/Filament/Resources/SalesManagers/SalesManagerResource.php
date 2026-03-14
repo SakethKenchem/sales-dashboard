@@ -5,6 +5,7 @@ namespace App\Filament\Resources\SalesManagers;
 use App\Filament\Resources\SalesManagers\Pages\CreateSalesManager;
 use App\Filament\Resources\SalesManagers\Pages\EditSalesManager;
 use App\Filament\Resources\SalesManagers\Pages\ListSalesManagers;
+use App\Filament\Resources\SalesManagers\Pages\ViewSalesManager;
 use App\Filament\Resources\SalesManagers\RelationManagers\SalesRecordsRelationManager;
 use App\Filament\Resources\SalesManagers\Schemas\SalesManagerForm;
 use App\Filament\Resources\SalesManagers\Tables\SalesManagersTable;
@@ -71,6 +72,7 @@ class SalesManagerResource extends Resource
         return [
             'index' => ListSalesManagers::route('/'),
             'create' => CreateSalesManager::route('/create'),
+            'view' => ViewSalesManager::route('/{record}'),
             'edit' => EditSalesManager::route('/{record}/edit'),
         ];
     }

@@ -40,7 +40,7 @@ class SalesRecordForm
                         TextInput::make('qtr_tgt')->numeric(),
                         TextInput::make('mon_tgt')->numeric(),
                         TextInput::make('total_achieved')->numeric(),
-                        TextInput::make('commit_month')->label('Commit - MAR')->numeric(),
+                        TextInput::make('commit_month')->label('Commit (Import Month)')->numeric(),
                         TextInput::make('percent_achvd_q1')->label('%Achvd Q1')->numeric(),
                         TextInput::make('bal_to_achv')->label('Bal to Achv Q1')->numeric(),
                     ]),

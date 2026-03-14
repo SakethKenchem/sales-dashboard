@@ -57,3 +57,16 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+
+Changelog (2026-03-14):
+feat: Add vendor viewing functionality and enhance sales data management
+
+- Implemented a new view page for vendors, allowing users to view vendor details.
+- Added view pages for regions and sales managers to improve data accessibility.
+- Introduced a new SalesMetricsQuery class to streamline sales data queries and deduplication.
+- Enhanced MonthlyAchievementChart and RegionAchievementChart widgets to utilize the new SalesMetricsQuery.
+- Created actions for deduplicating and wiping sales data, improving data integrity and management.
+- Added integrity columns to the sales_records table to track source files and row hashes for better data validation.
+- Updated import functionality to support new integrity checks and improved data handling.
+- Introduced a TopRegionsTable widget to display performance metrics for regions.

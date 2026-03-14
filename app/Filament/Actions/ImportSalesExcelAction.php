@@ -59,17 +59,22 @@ class ImportSalesExcelAction
                 $absolutePath = Storage::disk('local')->path($relativePath);
                 $importer = app(SalesDataImport::class);
                 $importer->autoAdjustWorkbookLayout($absolutePath);
-                $summary = $importer->import($absolutePath);
+                $summary = $importer->import($absolutePath, basename($relativePath));
+
+                $integrityLine = ($summary['integrity_ok'] ?? false)
+                    ? 'Integrity: OK'
+                    : ('Integrity: CHECK REQUIRED - ' . ($summary['integrity_message'] ?? 'Unknown mismatch'));
 
                 Notification::make()
                     ->title('Import completed')
                     ->body(sprintf(
-                        'Sheets: %d | Imported rows: %d | Skipped rows: %d',
+                        'Sheets: %d | Imported rows: %d | Skipped rows: %d | %s',
                         $summary['processed_sheets'],
                         $summary['imported_rows'],
                         $summary['skipped_rows'],
+                        $integrityLine,
                     ))
-                    ->success()
+                    ->color(($summary['integrity_ok'] ?? false) ? 'success' : 'warning')
                     ->send();
             });
     }

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Regions\Tables;
 
+use App\Filament\Resources\Regions\RegionResource;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -44,7 +45,8 @@ class RegionsTable
             ])
             ->recordActions([
                 EditAction::make(),
-                ViewAction::make(),
+                ViewAction::make()
+                    ->url(fn($record): string => RegionResource::getUrl('view', ['record' => $record])),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
